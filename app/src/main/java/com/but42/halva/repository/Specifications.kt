@@ -9,5 +9,6 @@ interface Specification
 
 @Suppress("unused")
 interface QuerySpecification<O> : Specification
-
 interface RequestSpecification : Specification
+
+class GetListSpec : QuerySpecification<List<ListItem>>

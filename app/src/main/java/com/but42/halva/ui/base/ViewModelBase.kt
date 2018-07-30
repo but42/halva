@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel
 import com.but42.halva.repository.QuerySpecification
 import com.but42.halva.repository.Repository
 import com.but42.halva.repository.RequestSpecification
+import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
@@ -28,9 +29,13 @@ abstract class ViewModelBase(
                 .subscribe(action))
     }
 
-    protected fun <T> query(spec: QuerySpecification<T>, action: (T) -> Unit = {}) {
+    protected fun <T> query(spec: QuerySpecification<T>, action: (T) -> Unit) {
         compositeDisposable.add(repository.query(spec)
                 .subscribeOn(Schedulers.io())
                 .subscribe(action))
     }
+
+    protected fun <T> query(spec: QuerySpecification<T>): Flowable<T>
+            = repository.query(spec)
+            .subscribeOn(Schedulers.io())
 }

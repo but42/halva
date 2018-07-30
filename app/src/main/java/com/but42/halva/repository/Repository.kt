@@ -18,13 +18,28 @@ interface Repository {
 }
 
 class RepositoryImpl @Inject constructor() : Repository {
+    private val items: List<ListItem>
+
+    init {
+        val time = "13:46"
+        val string = StringBuilder("0")
+        val list = mutableListOf(ListItem(string.toString(), time))
+        for (i in 1..50) {
+            string.append(" $i")
+            list.add(ListItem(string.toString(), time))
+        }
+        items = list
+    }
+
     override fun request(spec: RequestSpecification): Completable {
         TODO("not implemented")
     }
 
-    override fun <O> query(spec: QuerySpecification<O>): Flowable<O> {
-        TODO("not implemented")
-    }
+    @Suppress("UNCHECKED_CAST")
+    override fun <O> query(spec: QuerySpecification<O>): Flowable<O> = when (spec) {
+        is GetListSpec -> Flowable.just(items)
+        else -> throw IllegalArgumentException("Wrong query specification ${spec.javaClass.simpleName}")
+    }.map { it as O }
 }
 
 @Module interface RepositoryModule {
