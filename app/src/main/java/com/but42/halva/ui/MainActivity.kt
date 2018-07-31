@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.but42.halva.R
 import com.but42.halva.ui.list.ListFragment
+import com.but42.halva.ui.timer.TimerFragment
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         var fragment: Fragment? = fm.findFragmentById(R.id.fragment_container)
 
         if (fragment == null) {
-            fragment = ListFragment.newInstance()
+            fragment = TimerFragment.newInstance()
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit()

@@ -12,3 +12,5 @@ interface QuerySpecification<O> : Specification
 interface RequestSpecification : Specification
 
 class GetListSpec : QuerySpecification<List<ListItem>>
+class GetTimeUpEventSpec : QuerySpecification<Boolean>
+class StartTimerSpec : RequestSpecification
