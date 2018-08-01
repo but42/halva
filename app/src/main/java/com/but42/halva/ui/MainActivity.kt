@@ -1,10 +1,10 @@
 package com.but42.halva.ui
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import com.but42.halva.R
-import com.but42.halva.ui.list.ListFragment
+import com.but42.halva.ui.start.StartFragment
 import com.but42.halva.ui.timer.TimerFragment
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         var fragment: Fragment? = fm.findFragmentById(R.id.fragment_container)
 
         if (fragment == null) {
-            fragment = TimerFragment.newInstance()
+            fragment = StartFragment.newInstance()
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit()

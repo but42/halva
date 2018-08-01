@@ -1,5 +1,7 @@
 package com.but42.halva.ui.base
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.but42.halva.repository.QuerySpecification
 import com.but42.halva.repository.Repository
@@ -15,13 +17,16 @@ import io.reactivex.schedulers.Schedulers
  */
 abstract class ViewModelBase(
         private val repository: Repository
-) : ViewModel() {
+) : ViewModel(), FragmentViewModel {
     val compositeDisposable = CompositeDisposable()
+    override val fragmentLiveData by lazy { MutableLiveData<FragmentEvent>() }
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
     }
+
+    protected fun replaceFragment(event: FragmentEvent) = fragmentLiveData.postValue(event)
 
     protected fun request(spec: RequestSpecification, action: () -> Unit = {}) {
         compositeDisposable.add(repository.request(spec)
