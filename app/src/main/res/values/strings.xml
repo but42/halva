@@ -3,4 +3,6 @@
     <string name="start_button_text">Старт</string>
     <string name="list_title">Список</string>
     <string name="timer_title">Таймер</string>
+    <string name="time_out_text">Время вышло</string>
+    <string name="close">Закрыть</string>
 </resources>

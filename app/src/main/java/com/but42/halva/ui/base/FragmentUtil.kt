@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentManager
 import com.but42.halva.ui.list.ListFragment
 import com.but42.halva.ui.start.StartFragment
@@ -11,6 +12,7 @@ import com.but42.halva.ui.timer.TimerFragment
 import javax.inject.Inject
 import javax.inject.Singleton
 import com.but42.halva.R
+import com.but42.halva.ui.TimeOutDialogFragment
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
@@ -39,12 +41,18 @@ import io.reactivex.subjects.Subject
             FragmentType.LIST -> ListFragment.newInstance()
             FragmentType.TIMER -> TimerFragment.newInstance()
             FragmentType.START -> StartFragment.newInstance()
+            FragmentType.TIME_OUT -> TimeOutDialogFragment.newInstance()
         }
-        manager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit()
+        if (fragment is DialogFragment) {
+            val oldFragment = manager.findFragmentByTag(event.type.name)
+            if (oldFragment == null) fragment.show(manager, event.type.name)
+        } else {
+            manager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit()
+            events.postValue(event.type)
+        }
         event.isHappen = true
-        events.postValue(event.type)
     }
 }
 
@@ -54,7 +62,7 @@ class FragmentEvent(
 )
 
 enum class FragmentType {
-    LIST, TIMER, START
+    LIST, TIMER, START, TIME_OUT
 }
 
 interface FragmentViewModel {

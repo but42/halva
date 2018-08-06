@@ -1,11 +1,11 @@
 package com.but42.halva.ui.timer
 
-import android.util.Log
 import com.but42.halva.repository.GetTimeUpEventSpec
 import com.but42.halva.repository.Repository
 import com.but42.halva.repository.StartTimerSpec
 import com.but42.halva.ui.base.FragmentEvent
-import com.but42.halva.ui.base.FragmentType
+import com.but42.halva.ui.base.FragmentType.START
+import com.but42.halva.ui.base.FragmentType.TIME_OUT
 import com.but42.halva.ui.base.FragmentViewModel
 import com.but42.halva.ui.base.ViewModelBase
 import javax.inject.Inject
@@ -25,10 +25,10 @@ class TimerViewModelImpl @Inject constructor(
 ) : ViewModelBase(repository), TimerViewModel {
     init {
         query(GetTimeUpEventSpec()) {
-            Log.d("timer", "time is up")
+            replaceFragment(FragmentEvent(TIME_OUT))
         }
     }
 
     override fun onStart() = request(StartTimerSpec())
-    override fun onBackPressed() = replaceFragment(FragmentEvent(FragmentType.START))
+    override fun onBackPressed() = replaceFragment(FragmentEvent(START))
 }
