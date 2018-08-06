@@ -8,14 +8,14 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.but42.halva.app.ViewModelFactory
-import dagger.android.support.AndroidSupportInjection
-import javax.inject.Inject
 import com.but42.halva.R
+import com.but42.halva.app.ViewModelFactory
 import com.but42.halva.databinding.FragmentStartBinding
 import com.but42.halva.ui.base.FragmentUtil
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
 /**
  * Created by Mikhail Kuznetsov on 30.07.2018.

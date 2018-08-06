@@ -2,6 +2,7 @@ package com.but42.halva.ui.base
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.support.v4.app.FragmentManager
 import com.but42.halva.ui.list.ListFragment
@@ -20,9 +21,10 @@ import io.reactivex.subjects.Subject
  */
 @Singleton class FragmentUtil @Inject constructor() {
     private val subject: Subject<FragmentType> = PublishSubject.create()
+    private val events = MutableLiveData<FragmentType>()
 
-    fun subscribe(action: (FragmentType) -> Unit) {
-        subject.subscribe(action)
+    fun subscribe(owner: LifecycleOwner, action: (FragmentType) -> Unit) {
+        events.observe(owner, Observer { action.invoke(it ?: return@Observer) })
     }
 
     fun observe(owner: LifecycleOwner, viewModel: FragmentViewModel, manager: FragmentManager?) {
@@ -42,7 +44,7 @@ import io.reactivex.subjects.Subject
                 .replace(R.id.fragment_container, fragment)
                 .commit()
         event.isHappen = true
-        subject.onNext(event.type)
+        events.postValue(event.type)
     }
 }
 

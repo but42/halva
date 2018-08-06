@@ -5,13 +5,13 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.but42.halva.R
 import com.but42.halva.app.ViewModelFactory
 import com.but42.halva.databinding.FragmentListBinding
+import com.but42.halva.ui.base.FragmentUtil
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjection
@@ -25,6 +25,7 @@ import javax.inject.Scope
  */
 class ListFragment : Fragment() {
     @Inject lateinit var factory: ViewModelFactory
+    @Inject lateinit var fragmentUtil: FragmentUtil
     //@Inject lateinit var adapter: ListAdapter
     private lateinit var viewModel: ListViewModel
 
@@ -37,7 +38,7 @@ class ListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory)[ListViewModelImpl::class.java]
         //adapter.init(viewModel)
-        Log.d("list", "adapter: ${viewModel.adapter}")
+        fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,6 +46,8 @@ class ListFragment : Fragment() {
         binding.listRecycler.adapter = viewModel.adapter
         return binding.root
     }
+
+    fun onBackPressed() = viewModel.onBackPressed()
 
     companion object {
         fun newInstance() = ListFragment()

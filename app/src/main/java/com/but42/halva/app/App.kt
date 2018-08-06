@@ -20,6 +20,7 @@ import dagger.Module
 import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import dagger.android.support.FragmentKey
 import dagger.android.support.HasSupportFragmentInjector
@@ -32,8 +33,9 @@ import javax.inject.Singleton
  *
  * @author Mikhail Kuznetsov
  */
-class App : Application(), HasSupportFragmentInjector {
+class App : Application(), HasActivityInjector, HasSupportFragmentInjector {
 
+    @Inject lateinit var activityInjector: DispatchingAndroidInjector<Activity>
     @Inject lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun onCreate() {
@@ -43,6 +45,7 @@ class App : Application(), HasSupportFragmentInjector {
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+    override fun activityInjector(): AndroidInjector<Activity> = activityInjector
 }
 
 @Component(modules = [AppModule::class, AndroidSupportInjectionModule::class,

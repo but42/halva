@@ -13,6 +13,7 @@ import com.but42.halva.databinding.FragmentTimerBinding
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 import com.but42.halva.R
+import com.but42.halva.ui.base.FragmentUtil
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
@@ -23,6 +24,7 @@ import dagger.android.AndroidInjector
  */
 class TimerFragment : Fragment() {
     @Inject lateinit var factory: ViewModelFactory
+    @Inject lateinit var fragmentUtil: FragmentUtil
     private lateinit var viewModel: TimerViewModel
 
     override fun onAttach(context: Context?) {
@@ -33,6 +35,7 @@ class TimerFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory)[TimerViewModelImpl::class.java]
+        fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,6 +43,8 @@ class TimerFragment : Fragment() {
         binding.viewModel = viewModel
         return binding.root
     }
+
+    fun onBackPressed() = viewModel.onBackPressed()
 
     companion object {
         fun newInstance() = TimerFragment()
